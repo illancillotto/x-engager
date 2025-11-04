@@ -128,6 +128,8 @@ class ByTypeBarChart extends StatelessWidget {
         return 'Retweet';
       case ActionType.reply:
         return 'Reply';
+      case ActionType.follow:
+        return 'Follow';
     }
   }
 
@@ -141,6 +143,8 @@ class ByTypeBarChart extends StatelessWidget {
         return 'RT';
       case ActionType.reply:
         return 'Reply';
+      case ActionType.follow:
+        return 'Follow';
     }
   }
 
@@ -154,6 +158,8 @@ class ByTypeBarChart extends StatelessWidget {
         return Colors.green[400]!;
       case ActionType.reply:
         return Colors.blue[400]!;
+      case ActionType.follow:
+        return Colors.orange[400]!;
     }
   }
 }

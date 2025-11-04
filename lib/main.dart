@@ -4,6 +4,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'services/storage_service.dart';
 import 'services/llm_service.dart';
 import 'services/x_actions_service.dart';
+import 'services/x_session_service.dart';
+import 'services/automation_service.dart';
 import 'app_router.dart';
 import 'theme.dart';
 
@@ -31,6 +33,14 @@ final xActionsServiceProvider = Provider<XActionsService>((ref) {
   return XActionsService(storage.actionsBox);
 });
 
+final xSessionServiceProvider = Provider<XSessionService>((ref) {
+  throw UnimplementedError('xSessionServiceProvider must be overridden');
+});
+
+final automationServiceProvider = Provider<AutomationService>((ref) {
+  throw UnimplementedError('automationServiceProvider must be overridden');
+});
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -45,10 +55,25 @@ void main() async {
   final storageService = StorageService();
   await storageService.init();
 
+  // Initialize X session service
+  final xSessionService = XSessionService();
+  await xSessionService.init();
+
+  // Initialize automation service
+  final automationService = AutomationService(
+    xSessionService,
+    storageService.automationConfigBox,
+    storageService.actionCountersBox,
+    storageService.actionsBox,
+  );
+  await automationService.init();
+
   runApp(
     ProviderScope(
       overrides: [
         storageServiceProvider.overrideWithValue(storageService),
+        xSessionServiceProvider.overrideWithValue(xSessionService),
+        automationServiceProvider.overrideWithValue(automationService),
       ],
       child: const MyApp(),
     ),

@@ -307,6 +307,8 @@ class _LogScreenState extends ConsumerState<LogScreen> {
         return Icons.repeat;
       case ActionType.reply:
         return Icons.reply;
+      case ActionType.follow:
+        return Icons.person_add;
     }
   }
 
@@ -320,6 +322,8 @@ class _LogScreenState extends ConsumerState<LogScreen> {
         return 'Retweet';
       case ActionType.reply:
         return 'Reply';
+      case ActionType.follow:
+        return 'Follow';
     }
   }
 
@@ -333,6 +337,8 @@ class _LogScreenState extends ConsumerState<LogScreen> {
         return Colors.green[400]!;
       case ActionType.reply:
         return Colors.blue[400]!;
+      case ActionType.follow:
+        return Colors.orange[400]!;
     }
   }
 }

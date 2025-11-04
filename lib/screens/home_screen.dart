@@ -194,6 +194,8 @@ class HomeScreen extends ConsumerWidget {
         return Icons.repeat;
       case ActionType.reply:
         return Icons.reply;
+      case ActionType.follow:
+        return Icons.person_add;
     }
   }
 
@@ -207,6 +209,8 @@ class HomeScreen extends ConsumerWidget {
         return Colors.green[400]!;
       case ActionType.reply:
         return Colors.blue[400]!;
+      case ActionType.follow:
+        return Colors.orange[400]!;
     }
   }
 }

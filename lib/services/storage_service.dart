@@ -1,13 +1,18 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/x_action.dart';
+import '../models/automation_config.dart';
 
 class StorageService {
   static const String _actionsBoxName = 'actions';
   static const String _settingsBoxName = 'settings';
+  static const String _automationConfigBoxName = 'automation_config';
+  static const String _actionCountersBoxName = 'action_counters';
 
   Box<XAction>? _actionsBox;
   Box? _settingsBox;
+  Box<AutomationConfig>? _automationConfigBox;
+  Box<ActionCounter>? _actionCountersBox;
 
   Future<void> init() async {
     final appDocDir = await getApplicationDocumentsDirectory();
@@ -20,10 +25,21 @@ class StorageService {
     if (!Hive.isAdapterRegistered(2)) {
       Hive.registerAdapter(XActionAdapter());
     }
+    if (!Hive.isAdapterRegistered(3)) {
+      Hive.registerAdapter(AutomationConfigAdapter());
+    }
+    if (!Hive.isAdapterRegistered(4)) {
+      Hive.registerAdapter(TimeSlotAdapter());
+    }
+    if (!Hive.isAdapterRegistered(5)) {
+      Hive.registerAdapter(ActionCounterAdapter());
+    }
 
     // Open boxes
     _actionsBox = await Hive.openBox<XAction>(_actionsBoxName);
     _settingsBox = await Hive.openBox(_settingsBoxName);
+    _automationConfigBox = await Hive.openBox<AutomationConfig>(_automationConfigBoxName);
+    _actionCountersBox = await Hive.openBox<ActionCounter>(_actionCountersBoxName);
   }
 
   Box<XAction> get actionsBox {
@@ -38,6 +54,20 @@ class StorageService {
       throw Exception('Settings box not initialized');
     }
     return _settingsBox!;
+  }
+
+  Box<AutomationConfig> get automationConfigBox {
+    if (_automationConfigBox == null || !_automationConfigBox!.isOpen) {
+      throw Exception('Automation config box not initialized');
+    }
+    return _automationConfigBox!;
+  }
+
+  Box<ActionCounter> get actionCountersBox {
+    if (_actionCountersBox == null || !_actionCountersBox!.isOpen) {
+      throw Exception('Action counters box not initialized');
+    }
+    return _actionCountersBox!;
   }
 
   // Settings helpers
@@ -59,5 +89,7 @@ class StorageService {
   Future<void> close() async {
     await _actionsBox?.close();
     await _settingsBox?.close();
+    await _automationConfigBox?.close();
+    await _actionCountersBox?.close();
   }
 }

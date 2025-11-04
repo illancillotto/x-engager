@@ -12,6 +12,8 @@ enum ActionType {
   retweet,
   @HiveField(3)
   reply,
+  @HiveField(4)
+  follow,
 }
 
 @HiveType(typeId: 2)
@@ -45,6 +47,8 @@ class XAction extends HiveObject {
         return 'Retweet';
       case ActionType.reply:
         return 'Reply';
+      case ActionType.follow:
+        return 'Follow';
     }
   }
 }

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'screens/home_screen.dart';
+import 'screens/x_feed_screen.dart';
 import 'screens/composer_screen.dart';
 import 'screens/log_screen.dart';
 import 'screens/settings_screen.dart';
 
 class AppRouter {
-  static final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
-  static final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> _rootNavigatorKey =
+      GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> _shellNavigatorKey =
+      GlobalKey<NavigatorState>();
 
   static final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
@@ -24,6 +27,13 @@ class AppRouter {
             name: 'home',
             pageBuilder: (context, state) => const NoTransitionPage(
               child: HomeScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/x-feed',
+            name: 'x-feed',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: XFeedScreen(),
             ),
           ),
           GoRoute(
@@ -63,12 +73,14 @@ class ScaffoldWithNavBar extends StatelessWidget {
     final location = GoRouterState.of(context).uri.toString();
 
     int selectedIndex = 0;
-    if (location.startsWith('/compose')) {
+    if (location.startsWith('/x-feed')) {
       selectedIndex = 1;
-    } else if (location.startsWith('/log')) {
+    } else if (location.startsWith('/compose')) {
       selectedIndex = 2;
-    } else if (location.startsWith('/settings')) {
+    } else if (location.startsWith('/log')) {
       selectedIndex = 3;
+    } else if (location.startsWith('/settings')) {
+      selectedIndex = 4;
     }
 
     return Scaffold(
@@ -81,12 +93,15 @@ class ScaffoldWithNavBar extends StatelessWidget {
               context.go('/');
               break;
             case 1:
-              context.go('/compose');
+              context.go('/x-feed');
               break;
             case 2:
-              context.go('/log');
+              context.go('/compose');
               break;
             case 3:
+              context.go('/log');
+              break;
+            case 4:
               context.go('/settings');
               break;
           }
@@ -96,6 +111,11 @@ class ScaffoldWithNavBar extends StatelessWidget {
             icon: Icon(Icons.home_outlined),
             selectedIcon: Icon(Icons.home),
             label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.close),
+            selectedIcon: Icon(Icons.close),
+            label: 'X',
           ),
           NavigationDestination(
             icon: Icon(Icons.edit_outlined),
