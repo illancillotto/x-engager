@@ -24,23 +24,30 @@ class PromptSelector extends StatelessWidget {
       items: templates.map((template) {
         return DropdownMenuItem<String>(
           value: template['id'] as String,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                template['description'] as String,
-                style: const TextStyle(fontWeight: FontWeight.w500),
-              ),
-              if (template['rules'] != null)
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
                 Text(
-                  _buildRulesText(template['rules']),
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.grey[600],
-                  ),
+                  template['description'] as String,
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
-            ],
+                if (template['rules'] != null)
+                  Text(
+                    _buildRulesText(template['rules']),
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Colors.grey[600],
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+              ],
+            ),
           ),
         );
       }).toList(),

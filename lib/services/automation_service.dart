@@ -23,17 +23,23 @@ class AutomationService {
   );
 
   AutomationConfig get config {
-    return _configBox.get('config') ??
-        AutomationConfig()
-      ..save();
+    var cfg = _configBox.get('config');
+    if (cfg == null) {
+      cfg = AutomationConfig();
+      _configBox.put('config', cfg);
+    }
+    return cfg;
   }
 
   ActionCounter get counter {
     final now = DateTime.now();
     final key = '${now.year}-${now.month}-${now.day}';
-    return _counterBox.get(key) ??
-        ActionCounter(date: now)
-      ..save();
+    var counter = _counterBox.get(key);
+    if (counter == null) {
+      counter = ActionCounter(date: now);
+      _counterBox.put(key, counter);
+    }
+    return counter;
   }
 
   Future<void> init() async {

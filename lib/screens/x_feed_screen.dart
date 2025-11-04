@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../main.dart';
+import '../widgets/automation_control_panel.dart';
 import 'x_login_screen.dart';
 
 class XFeedScreen extends ConsumerStatefulWidget {
@@ -166,7 +167,8 @@ class _XFeedScreenState extends ConsumerState<XFeedScreen> {
               leading: const Icon(Icons.explore),
               title: const Text('Esplora'),
               onTap: () {
-                _controller.loadRequest(Uri.parse('https://twitter.com/explore'));
+                _controller
+                    .loadRequest(Uri.parse('https://twitter.com/explore'));
                 Navigator.pop(context);
               },
             ),
@@ -174,7 +176,8 @@ class _XFeedScreenState extends ConsumerState<XFeedScreen> {
               leading: const Icon(Icons.notifications),
               title: const Text('Notifiche'),
               onTap: () {
-                _controller.loadRequest(Uri.parse('https://twitter.com/notifications'));
+                _controller.loadRequest(
+                    Uri.parse('https://twitter.com/notifications'));
                 Navigator.pop(context);
               },
             ),
@@ -182,7 +185,8 @@ class _XFeedScreenState extends ConsumerState<XFeedScreen> {
               leading: const Icon(Icons.mail),
               title: const Text('Messaggi'),
               onTap: () {
-                _controller.loadRequest(Uri.parse('https://twitter.com/messages'));
+                _controller
+                    .loadRequest(Uri.parse('https://twitter.com/messages'));
                 Navigator.pop(context);
               },
             ),
@@ -209,9 +213,20 @@ class _XFeedScreenState extends ConsumerState<XFeedScreen> {
     );
   }
 
+  void _showAutomationPanel() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const AutomationControlPanel(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final automationService = ref.watch(automationServiceProvider);
+    final isAutomationEnabled = automationService.config.enabled;
 
     return Scaffold(
       appBar: AppBar(
@@ -263,12 +278,37 @@ class _XFeedScreenState extends ConsumerState<XFeedScreen> {
             ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _controller.loadRequest(Uri.parse('https://twitter.com/compose/tweet'));
-        },
-        tooltip: 'Nuovo Tweet',
-        child: const Icon(Icons.edit),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          // Automation toggle button
+          FloatingActionButton(
+            heroTag: 'automation',
+            onPressed: _showAutomationPanel,
+            backgroundColor: isAutomationEnabled
+                ? Colors.green
+                : theme.colorScheme.surfaceContainerHighest,
+            tooltip: isAutomationEnabled
+                ? 'Automazione attiva'
+                : 'Automazione disattivata',
+            child: Icon(
+              isAutomationEnabled ? Icons.smart_toy : Icons.smart_toy_outlined,
+              color: isAutomationEnabled ? Colors.white : null,
+            ),
+          ),
+          const SizedBox(height: 16),
+          // New tweet button
+          FloatingActionButton(
+            heroTag: 'compose',
+            onPressed: () {
+              _controller
+                  .loadRequest(Uri.parse('https://twitter.com/compose/tweet'));
+            },
+            tooltip: 'Nuovo Tweet',
+            child: const Icon(Icons.edit),
+          ),
+        ],
       ),
     );
   }
