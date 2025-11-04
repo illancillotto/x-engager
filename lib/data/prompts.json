@@ -1,0 +1,47 @@
+[
+  {
+    "id": "short_post",
+    "description": "Post breve ironico/brillante",
+    "rules": {
+      "max_chars": 220,
+      "hashtags_max": 2,
+      "emojis_max": 1,
+      "cta": "soft"
+    }
+  },
+  {
+    "id": "reply_helpful",
+    "description": "Risposta utile e cortese",
+    "rules": {
+      "max_chars": 200,
+      "avoid_tags": true
+    }
+  },
+  {
+    "id": "thread_3",
+    "description": "Thread 3 parti, hook iniziale, chiusura con domanda",
+    "rules": {
+      "parts": 3,
+      "part_max_chars": 230
+    }
+  },
+  {
+    "id": "meme_style",
+    "description": "Post stile meme, divertente",
+    "rules": {
+      "max_chars": 180,
+      "hashtags_max": 1,
+      "emojis_max": 2
+    }
+  },
+  {
+    "id": "professional",
+    "description": "Post professionale e informativo",
+    "rules": {
+      "max_chars": 240,
+      "hashtags_max": 3,
+      "emojis_max": 0,
+      "cta": "strong"
+    }
+  }
+]
